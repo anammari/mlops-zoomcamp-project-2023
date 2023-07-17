@@ -8,15 +8,15 @@ In this MLOps zoomcamp e-course capstone project, we aim to tackle the challenge
 
 ## Technologies:
 
-Cloud: AWS + Localstack
-Experiment tracking tools: MLFlow
-Workflow orchestration: Prefect
-Monitoring: Evidently
-CI/CD: Github actions
-Infrastructure as code (IaC): Terraform
-Unit Testing: pytest
-Integration testing: Localstack
-Model training: Pytorch Lightning
-Model tuning: Optuna
-Containerization: Docker
+- Cloud: AWS + Localstack
+- Experiment tracking tools: MLFlow
+- Workflow orchestration: Prefect
+- Monitoring: Evidently
+- CI/CD: Github actions
+- Infrastructure as code (IaC): Terraform
+- Unit Testing: pytest
+- Integration testing: Localstack
+- Model training: Pytorch Lightning
+- Model tuning: Optuna
+- Containerization: Docker
 
