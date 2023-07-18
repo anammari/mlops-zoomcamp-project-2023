@@ -20,3 +20,10 @@ In this MLOps zoomcamp e-course capstone project, we aim to tackle the challenge
 - Model tuning: Optuna
 - Containerization: Docker
 
+## Data Inputs and Outputs
+
+The ML model for estimating trip fare takes latitude and longitude coordinates as inputs, which correspond to the pickup and drop-off locations of a taxi ride in Washington, DC. These coordinates are then utilized by the ML model to predict the trip fare accurately. The service does not require human-readable addresses for geocoding; instead, it expects direct latitude and longitude values. To interact with the service after the deployment of the ML model into production, users can use a mobile application where they can visually drop pins on a map to specify the pickup and drop-off locations. Alternatively, users may have the option to use geocoding features from services like Google Maps as an alternative input method for specifying locations.
+
+<p align="center">
+  <img src="img/data_schema.PNG" alt="Data Schema">
+</p>
