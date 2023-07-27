@@ -17,8 +17,10 @@ xgboost = "==1.7.5"
 orjson = "==3.8.1"
 boto3 = "*"
 psycopg2-binary = "*"
+s3fs = "*"
 
 [dev-packages]
+jinja2 = "*"
 
 [requires]
 python_version = "3.10"
