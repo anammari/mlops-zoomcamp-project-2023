@@ -35,9 +35,9 @@ The ML model for estimating trip fare takes latitude and longitude coordinates a
 
 ## Model Training
 
-In [model training](./ml_train/), we leverage multiple ML alogorithms, including Linear Regression, Lasso, and XGBoost to develp the fare predictor. We also apply hyperparameter optimisation / tuning using Hyperopt. We also integrate MLFlow to track our ML training experiments and log the trained models in AWS S3. 
+In [model training](./ml_train/), we leverage multiple ML algorithms, including Linear Regression, Lasso, and XGBoost to develp the fare predictor. We also apply hyperparameter optimisation / tuning using Hyperopt. We also integrate MLFlow to track our ML training experiments and log the trained models in AWS S3. 
 
-1. Firstly, we create AWS S3 bucket and RDS service (PostgreSQL database) for he backend of our MLFlow experiment tracking.
+1. Firstly, we create AWS S3 bucket and RDS service (PostgreSQL database) for the backend of our MLFlow experiment tracking.
 
 <p align="center">
   <img src="img/rds_s3.PNG" alt="Data Schema">
