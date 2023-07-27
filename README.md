@@ -1,7 +1,5 @@
 # MLOps Zoomcamp Course Project (cohorts 2023)
 
-<h1 align="center" style="font-size: 36px;">MLOps (ML Operations)</h1>
-
 <p align="center">
   <img src="img/mlops-high-level.gif" alt="Data Schema">
 </p>
