@@ -6,6 +6,7 @@ from datetime import datetime
 import os
 import boto3
 import s3fs
+import io
 
 os.environ['AWS_PROFILE'] = 'default'
 
@@ -32,7 +33,9 @@ def read_dataframe(year, month):
     }
     )
     # Read the TXT file using '|' as the delimiter and specifying the column names
-    df = pd.read_csv(f'../data/test/taxi_{year}_{month}.txt', delimiter='|', storage_options=dict(profile='default'))
+    S3_BUCKET_NAME = 'mlflow-artifacts-remote-ahm-amm'
+    filename = f'taxi_{year}_{month}.txt'
+    df = pd.read_csv(f's3://{S3_BUCKET_NAME}/data/test/{filename}', delimiter='|', storage_options=dict(profile='default'))
     # Extract the required columns
     df = df[['FAREAMOUNT', 'ORIGIN_BLOCK_LATITUDE', 'ORIGIN_BLOCK_LONGITUDE', 'DESTINATION_BLOCK_LATITUDE', 'DESTINATION_BLOCK_LONGITUDE', 'ORIGINDATETIME_TR']]
     # Convert all headers to lowercase
@@ -62,25 +65,21 @@ def load_model():
     bucket_name = 'mlflow-artifacts-remote-ahm-amm'
 
     # Load the preprocessor
-    preprocessor_key = '1/ed175b743df843bc81ff5e60f917d4ac/artifacts/preprocessor/preprocessor.b'
+    preprocessor_key = '2/970c93158be841db8577f63c79f70329/artifacts/preprocessor/preprocessor.b'
     preprocessor_obj = s3.get_object(Bucket=bucket_name, Key=preprocessor_key)
     preprocessor_data = preprocessor_obj['Body'].read()
     dv = pickle.loads(preprocessor_data)
 
-    # Load the model
-    model_key = '1/ed175b743df843bc81ff5e60f917d4ac/artifacts/models_mlflow/model.xgb'
-    model_obj = s3.get_object(Bucket=bucket_name, Key=model_key)
-    model_data = model_obj['Body'].read()
-    booster = pickle.loads(model_data)
+    # Load the model as a PyFuncModel
+    logged_model = 'runs:/970c93158be841db8577f63c79f70329/models_mlflow'
+    booster = mlflow.pyfunc.load_model(logged_model)
 
     return (dv, booster)
     
-def preprocess(dv, serving_data):
+def preprocess(serving_data):
     categorical = ['month_integer', 'dow_integer', 'hour_integer']
-    numerical = ['fareamount', 'origin_block_latitude', 'origin_block_longitude', 'destination_block_latitude', 'destination_block_longitude']
-    serving_dicts = serving_data[categorical + numerical].to_dict(orient='records')
-    X_serving = dv.transform(serving_dicts)
-    serving = xgb.DMatrix(X_serving)
+    numerical = ['origin_block_latitude', 'origin_block_longitude', 'destination_block_latitude', 'destination_block_longitude']
+    serving = serving_data[categorical + numerical]
     return serving
     
 def main(year, month):
@@ -90,7 +89,7 @@ def main(year, month):
         df = read_dataframe(year, month)
         df = transform_data(df)
         (dv, booster) = load_model()
-        serving = preprocess(dv, df)
+        serving = preprocess(df)
         # Make predictions
         y_pred = booster.predict(serving)
         # Log some variables to mlflow
@@ -103,7 +102,10 @@ def main(year, month):
         output_key = f"data/output/{output_filename}"
         bucket_name = 'mlflow-artifacts-remote-ahm-amm'
         s3 = boto3.client('s3')
-        s3.upload_fileobj(pd.DataFrame(y_pred, columns=["predicted_amount"]).to_csv(index=False), bucket_name, output_key)
+        csv_buffer = io.BytesIO()
+        pd.DataFrame(y_pred, columns=["predicted_amount"]).to_csv(csv_buffer, index=False)
+        csv_buffer.seek(0)
+        s3.upload_fileobj(csv_buffer, bucket_name, output_key)
 
 if __name__ == "__main__":
     year = '2019'
