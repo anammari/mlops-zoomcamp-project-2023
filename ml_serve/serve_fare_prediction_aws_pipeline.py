@@ -17,7 +17,7 @@ mlflow.xgboost.autolog(disable=True)
 # Fill TRACKING_SERVER_HOST with the public DNS of the EC2 instance.
 TRACKING_SERVER_HOST = "ec2-52-4-31-201.compute-1.amazonaws.com" 
 mlflow.set_tracking_uri(f"http://{TRACKING_SERVER_HOST}:5000")
-mlflow.set_experiment("serve-wdc-taxi-ride-fair-prediction-s3")
+mlflow.set_experiment("serve-wdc-taxi-ride-fair-prediction-s3-pipeline")
 
 @task(name="Read Data", retries=3, retry_delay_seconds=2)
 def read_dataframe(year, month):
@@ -80,7 +80,11 @@ def preprocess(serving_data):
 
 @task(name="Log Serve Run", retries=3, retry_delay_seconds=2)
 def log_serve_run(df, y_pred):
+    mlflow.end_run()
     with mlflow.start_run():
+        # Add serve tags
+        mlflow.set_tag("developer", "ahmad")
+        mlflow.set_tag("model", "xgboost_best")
         # Log some variables to mlflow
         mlflow.log_metric("serving_data_row_count", len(df))
         mlflow.log_metric("predictions_row_count", len(y_pred))
@@ -100,6 +104,7 @@ def log_serve_run(df, y_pred):
         create_markdown_artifact(
             key="fare-model-report", markdown=markdown__rmse_report
         )
+    mlflow.end_run()
     return None
 
 @task(name="Write Predictions", retries=3, retry_delay_seconds=2)
@@ -116,25 +121,21 @@ def write_predictions(y_pred):
     
 @flow(name="ML Serve Flow")
 def main(year, month):
-    with mlflow.start_run():
-        # Add serve tags
-        mlflow.set_tag("developer", "ahmad")
-        mlflow.set_tag("model", "xgboost_best")
-        # Read the data
-        df = read_dataframe(year, month)
-        # Transform the data
-        df = transform_data(df)
-        # Load the model
-        booster = load_model()
-        # Preprocess the data
-        serving = preprocess(df)
-        # Make predictions
-        y_pred = booster.predict(serving)
-        # Log the run details
-        log_serve_run(df, y_pred)
-        # Persist the predictions
-        write_predictions(y_pred)
-
+    # Read the data
+    df = read_dataframe(year, month)
+    # Transform the data
+    df = transform_data(df)
+    # Load the model
+    booster = load_model()
+    # Preprocess the data
+    serving = preprocess(df)
+    # Make predictions
+    y_pred = booster.predict(serving)
+    # Log the run details
+    log_serve_run(df, y_pred)
+    # Persist the predictions
+    write_predictions(y_pred)
+    
 if __name__ == "__main__":
     year = '2019'
     month = '01'
