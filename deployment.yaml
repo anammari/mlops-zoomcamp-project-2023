@@ -1,0 +1,5 @@
+deployments:
+- name: serve_wdc_taxi_s3_data
+  entrypoint: /home/ubuntu/mlops-zoomcamp-project-2023/ml_serve/serve_fare_prediction_aws_pipeline.py:main
+  work_pool: 
+    name: zoompool
