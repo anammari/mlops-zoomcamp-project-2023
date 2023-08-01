@@ -36,7 +36,7 @@ The fare predictions are persisted as a CSV file in an AWS S3 bucket under the '
 
 ## Pipeline Execution
 
-To execute the Model Serving Pipeline, you can specify the year and month of the taxi ride data you want to predict. The pipeline will then perform the following actions:
+To execute the Model Serving Pipeline, we run the script `./ml_serve/serve_fare_prediction_aws_pipeline.py`. Initially, you can specify the year and month of the taxi ride data you want to predict. The pipeline will then perform the following actions:
 
 1. Read the data from the specified year and month.
 
