@@ -59,25 +59,25 @@ Below are the screenshots of the pipeline execution:
 1. Prefect UI - Model Serving Flow Run:
 
 <p align="center">
-  <img src="../img/prefect_ml_serve_flow_run.PNG" alt="Data Schema">
+  <img src="../img/prefect_ml_serve_flow_run.PNG" alt="Model Serving Flow Run">
 </p>
 
 2. MLflow UI - Model Serving Experiment Details:
 
 <p align="center">
-  <img src="../img/mlflow_ml_serve_flow_run.PNG" alt="Data Schema">
+  <img src="../img/mlflow_ml_serve_flow_run.PNG" alt="Model Serving Experiment Details">
 </p>
 
 3. Output Folder on S3 with Predictions:
 
 <p align="center">
-  <img src="../img/s3_ml_serve_flow_output.PNG" alt="Data Schema">
+  <img src="../img/s3_ml_serve_flow_output.PNG" alt="Output Folder on S3 with Predictions">
 </p>
 
 4. Artifacts of the Tested Experiment - HTML Report:
 
 <p align="center">
-  <img src="../img/prefect_ml_serve_flow_artifacts.PNG" alt="Data Schema">
+  <img src="../img/prefect_ml_serve_flow_artifacts.PNG" alt="Artifacts of the Tested Experiment">
 </p>
 
 ## Conclusion
