@@ -54,3 +54,8 @@ In [model training](./ml_train/), we leverage multiple ML algorithms, including 
 <p align="center">
   <img src="img/best_model_mlflow_s3.PNG" alt="Data Schema">
 </p>
+
+## Model Serving
+
+The ML model serving pipeline is fully explained and demonstrated in the [ml_serve README](ml_serve/README.md) file
+
