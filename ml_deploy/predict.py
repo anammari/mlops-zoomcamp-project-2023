@@ -7,18 +7,16 @@ with open("models/preprocessor.b", "rb") as f_in:
     dv = pickle.load(f_in)
 with open('models/xgboost_best.bin', 'rb') as f_in:
     booster = pickle.load(f_in)
-return (dv, booster)
 
 
 def prepare_features(ride):
-    features = {}
     X_features = dv.transform(ride)
     X_xgb_features = xgb.DMatrix(X_features)
     return X_xgb_features
 
 
 def predict(features):
-    preds = model.predict(features)
+    preds = booster.predict(features)
     return float(preds[0])
 
 
