@@ -15,12 +15,12 @@ In this MLOps zoomcamp e-course capstone project, I aim to tackle the challenge 
 - Cloud: AWS + Localstack
 - Experiment tracking tools: MLFlow
 - Workflow orchestration: Prefect
-- Monitoring: Evidently
+- Monitoring: Evidently (metrics calculation) & Grafana (data vizualisation)
 - CI/CD: Github actions
 - Infrastructure as code (IaC): Terraform
 - Unit Testing: pytest
 - Integration testing: Localstack
-- Model training: Linear Regression, Lasso, Ridge, XGBoost
+- Model training: Linear Regression, Lasso, XGBoost
 - Model tuning: Hyperopt
 - Containerization: Docker
 - Dependency management: Pipenv
