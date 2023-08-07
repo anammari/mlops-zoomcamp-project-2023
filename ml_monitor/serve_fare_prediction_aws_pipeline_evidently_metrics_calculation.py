@@ -2,7 +2,7 @@ import pandas as pd
 import pickle
 import mlflow
 import xgboost as xgb
-from datetime import datetime
+from datetime import datetime, timedelta
 import time
 import random
 import os
@@ -60,7 +60,7 @@ report = Report(metrics = [
 @task(name="Read Data", retries=3, retry_delay_seconds=2)
 def read_dataframe(year, month):
     global begin
-    begin = datetime.datetime(int(year), int(month), 1, 0, 0)
+    begin = datetime(int(year), int(month), 1, 0, 0)
     # Setup AWS S3 
     session = boto3.Session(profile_name='default')
     credentials = session.get_credentials()
@@ -109,7 +109,7 @@ def read_reference():
     )
     # Read the TXT file using '|' as the delimiter and specifying the column names
     S3_BUCKET_NAME = 'mlflow-artifacts-remote-ahm-amm'
-    filename = 'reference.txt'
+    filename = 'reference.csv'
     df = pd.read_csv(f's3://{S3_BUCKET_NAME}/data/ref/{filename}', storage_options=dict(profile='default'))
     print(df.head(1))
     return df
@@ -151,8 +151,8 @@ def prep_db():
 @task(name="Calculate Metrics", retries=3, retry_delay_seconds=2)
 def calculate_metrics_postgresql(serving, ref_df, booster, curr, i):
     global begin
-    current_data = serving[(serving.origindatetime_tr >= (begin + datetime.timedelta(i))) & \
-                           (serving.origindatetime_tr < (begin + datetime.timedelta(i + 1)))]
+    current_data = serving[(serving.origindatetime_tr >= (begin + timedelta(i))) & \
+                           (serving.origindatetime_tr < (begin + timedelta(i + 1)))]
     current_data.drop('origindatetime_tr', axis=1, inplace=True)
     current_data['predicted_amount'] = booster.predict(current_data.fillna(0))
     
@@ -166,9 +166,9 @@ def calculate_metrics_postgresql(serving, ref_df, booster, curr, i):
     
     curr.execute(
         "insert into ride_metrics(timestamp, prediction_drift, num_drifted_columns, share_missing_values) values (%s, %s, %s, %s)",
-        (begin + datetime.timedelta(i), prediction_drift, num_drifted_columns, share_missing_values))
+        (begin + timedelta(i), prediction_drift, num_drifted_columns, share_missing_values))
 
-    y_pred = current_data['predicted_amount'].tolist()
+    y_pred = current_data['predicted_amount'].to_numpy()
     return (y_pred, current_data)
 
 @task(name="Log Serve Run", retries=3, retry_delay_seconds=2)
@@ -202,7 +202,7 @@ def write_predictions(y_pred):
 def main(year, month):
     # Prepare database
     prep_db()
-    last_send = datetime.datetime.now() - datetime.timedelta(seconds=10)
+    last_send = datetime.now() - timedelta(seconds=10)
     # Read the data
     df = read_dataframe(year, month)
     # Read the reference data  
@@ -222,12 +222,12 @@ def main(year, month):
                 log_serve_run(current_df, y_pred)
                 # Persist the predictions
                 write_predictions(y_pred)
-            new_send = datetime.datetime.now()
+            new_send = datetime.now()
             seconds_elapsed = (new_send - last_send).total_seconds()
             if seconds_elapsed < SEND_TIMEOUT:
                 time.sleep(SEND_TIMEOUT - seconds_elapsed)
             while last_send < new_send:
-                last_send = last_send + datetime.timedelta(seconds=10)
+                last_send = last_send + timedelta(seconds=10)
                 # Log the run details
     
 if __name__ == "__main__":

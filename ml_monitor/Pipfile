@@ -17,7 +17,7 @@ xgboost = "==1.7.5"
 orjson = "==3.8.1"
 boto3 = "*"
 pyarrow = "*"
-psycopg = "*"
+psycopg = {extras = ["binary"], version = "*"}
 psycopg2-binary = "*"
 evidently = "*"
 s3fs = "*"
