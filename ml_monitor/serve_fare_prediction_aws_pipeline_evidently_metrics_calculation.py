@@ -181,7 +181,10 @@ def log_serve_run(df, y_pred):
         # Log some variables to mlflow
         mlflow.log_metric("serving_data_row_count", len(df))
         mlflow.log_metric("predictions_row_count", len(y_pred))
-        mlflow.log_metric("mean_predicted_amount", y_pred.mean())
+        try:
+            mlflow.log_metric("mean_predicted_amount", y_pred.mean())
+        except TypeError:
+            print("Error: cannot convert the series to <class 'float'>")
         mlflow.set_tag("run_datetime", str(datetime.now()))
     mlflow.end_run()
     return None
