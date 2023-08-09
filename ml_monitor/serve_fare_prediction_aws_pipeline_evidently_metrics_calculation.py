@@ -23,7 +23,7 @@ mlflow.xgboost.autolog(disable=True)
 # Fill TRACKING_SERVER_HOST with the public DNS of the EC2 instance.
 TRACKING_SERVER_HOST = "ec2-52-4-31-201.compute-1.amazonaws.com" 
 mlflow.set_tracking_uri(f"http://{TRACKING_SERVER_HOST}:5000")
-mlflow.set_experiment("monitor-wdc-taxi-ride-fair-prediction-s3-pipeline")
+mlflow.set_experiment("monitor-10-wdc-taxi-ride-fair-prediction-s3-pipeline")
 
 SEND_TIMEOUT = 10
 rand = random.Random()
@@ -219,7 +219,7 @@ def main(year, month):
     
     # Make predictions & calculate metrics
     with psycopg.connect("host=localhost port=5432 dbname=test user=postgres password=example", autocommit=True) as conn:
-        for i in range(0, 27):
+        for i in range(0, 10):
             with conn.cursor() as curr:
                 current_df, y_pred = calculate_metrics_postgresql(serving, ref_df, booster, curr, i)
                 log_serve_run(current_df, y_pred)
