@@ -80,3 +80,7 @@ For [model deployment](./ml_deploy), the ML model has been deployed as a Flask W
 <p align="center">
   <img src="img/ml_deploy_test_container.PNG" alt="Test Docker container">
 </p> 
+
+## Model Monitoring
+
+The ML model monitoring proceeses and dashboard are fully explained and demonstrated in the [ml_monitor README](ml_monitor/README.md) file
