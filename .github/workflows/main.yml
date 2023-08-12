@@ -39,4 +39,4 @@ jobs:
         PIPENV_PIPFILE: ${{ github.workspace }}/ml_train/Pipfile
       run: |
         cd ml_serve
-        pipenv run serve_fare_prediction_aws_cicd.py
+        pipenv run python serve_fare_prediction_aws_cicd.py
