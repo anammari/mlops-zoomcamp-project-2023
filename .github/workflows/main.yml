@@ -21,6 +21,7 @@ jobs:
       run: |
         cd ml_train
         pipenv install --ignore-pipfile
+        pipenv shell
         cd ..
     - name: Set up environment variables for MLflow server
       run: |
@@ -38,4 +39,4 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
         cd ml_serve
-        pipenv run python serve_fare_prediction_aws_cicd.py
+        python serve_fare_prediction_aws_cicd.py
