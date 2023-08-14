@@ -23,7 +23,7 @@ def read_dataframe(year, month):
     region_name = 'us-east-1'
 
     fs = s3fs.S3FileSystem(
-        profile='default',
+        #profile='default',
         key=aws_access_key_id,
         secret=aws_secret_access_key,
         client_kwargs={
