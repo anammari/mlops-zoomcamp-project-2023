@@ -22,18 +22,22 @@ def read_dataframe(year, month):
     aws_secret_access_key = os.environ['AWS_SECRET_ACCESS_KEY']
     region_name = 'us-east-1'
 
-    fs = s3fs.S3FileSystem(
-        #profile='default',
-        key=aws_access_key_id,
-        secret=aws_secret_access_key,
-        client_kwargs={
-        'region_name': region_name
-    }
-    )
+    # Create an S3 client using the specified credentials
+    s3 = boto3.client('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
     # Read the TXT file using '|' as the delimiter and specifying the column names
     S3_BUCKET_NAME = 'mlflow-artifacts-remote-ahm-amm'
     filename = f'taxi_{year}_{month}.txt'
-    df = pd.read_csv(f's3://{S3_BUCKET_NAME}/data/test/{filename}', delimiter='|', storage_options=dict(profile='default'))
+    df = pd.read_csv(
+        f's3://{S3_BUCKET_NAME}/data/test/{filename}',
+        delimiter='|',
+        storage_options={
+            'key': aws_access_key_id,
+            'secret': aws_secret_access_key,
+            'client_kwargs': {
+                'region_name': region_name
+            }
+        }
+    )
     # Extract the required columns
     df = df[['FAREAMOUNT', 'ORIGIN_BLOCK_LATITUDE', 'ORIGIN_BLOCK_LONGITUDE', 'DESTINATION_BLOCK_LATITUDE', 'DESTINATION_BLOCK_LONGITUDE', 'ORIGINDATETIME_TR']]
     # Convert all headers to lowercase
