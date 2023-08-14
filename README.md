@@ -84,3 +84,9 @@ For [model deployment](./ml_deploy), the ML model has been deployed as a Flask W
 ## Model Monitoring
 
 The ML model monitoring proceeses and dashboard are fully explained and demonstrated in the [ml_monitor README](ml_monitor/README.md) file
+
+## CICD (GitHub Actions)
+
+The CICD (GitHub Actions) workflow is fully explained and demonstrated in the [workflows README](.github/README.md) file
+
+
