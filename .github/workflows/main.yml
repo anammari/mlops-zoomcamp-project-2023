@@ -30,8 +30,10 @@ jobs:
         echo "DB_NAME=mlflow_db" >> $GITHUB_ENV
         echo "S3_BUCKET_NAME=mlflow-artifacts-remote-ahm-amm" >> $GITHUB_ENV
     - name: Start MLflow server in background
+      env:
+        PIPENV_PIPFILE: ${{ github.workspace }}/ml_train/Pipfile
       run: |
-        nohup mlflow server -h 0.0.0.0 -p 5000 --backend-store-uri postgresql://${{ env.DB_USER }}:${{ env.DB_PASSWORD }}@${{ env.DB_ENDPOINT }}:5432/${{ env.DB_NAME }} --default-artifact-root s3://${{ env.S3_BUCKET_NAME }} &
+        pipenv run nohup mlflow server -h 0.0.0.0 -p 5000 --backend-store-uri postgresql://${{ env.DB_USER }}:${{ env.DB_PASSWORD }}@${{ env.DB_ENDPOINT }}:5432/${{ env.DB_NAME }} --default-artifact-root s3://${{ env.S3_BUCKET_NAME }}
     - name: Run script using pipenv environment
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
