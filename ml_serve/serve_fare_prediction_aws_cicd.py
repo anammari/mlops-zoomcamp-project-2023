@@ -8,7 +8,13 @@ import boto3
 import s3fs
 import io
 
-os.environ['AWS_PROFILE'] = 'default'
+# Setup AWS S3 
+aws_access_key_id = os.environ['AWS_ACCESS_KEY_ID']
+aws_secret_access_key = os.environ['AWS_SECRET_ACCESS_KEY']
+region_name = 'us-east-1'
+
+# Create an S3 client using the specified credentials
+s3 = boto3.client('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key, region_name=region_name)
 
 mlflow.xgboost.autolog(disable=True)
 # Fill TRACKING_SERVER_HOST with the public DNS of the EC2 instance.
@@ -17,13 +23,6 @@ mlflow.set_tracking_uri(f"http://{TRACKING_SERVER_HOST}:5000")
 mlflow.set_experiment("serve-wdc-taxi-ride-fair-prediction-s3-cicd")
 
 def read_dataframe(year, month):
-    # Setup AWS S3 
-    aws_access_key_id = os.environ['AWS_ACCESS_KEY_ID']
-    aws_secret_access_key = os.environ['AWS_SECRET_ACCESS_KEY']
-    region_name = 'us-east-1'
-
-    # Create an S3 client using the specified credentials
-    s3 = boto3.client('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
     # Read the TXT file using '|' as the delimiter and specifying the column names
     S3_BUCKET_NAME = 'mlflow-artifacts-remote-ahm-amm'
     filename = f'taxi_{year}_{month}.txt'
