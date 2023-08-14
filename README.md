@@ -87,6 +87,6 @@ The ML model monitoring proceeses and dashboard are fully explained and demonstr
 
 ## CICD (GitHub Actions)
 
-The CICD (GitHub Actions) workflow is fully explained and demonstrated in the [workflows README](.github/README.md) file
+The CICD (GitHub Actions) workflow is fully explained and demonstrated in the [workflows README](.github/workflows/README.md) file
 
 
