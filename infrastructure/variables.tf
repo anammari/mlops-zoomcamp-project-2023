@@ -10,4 +10,5 @@ variable "project_id" {
 
 variable "model_bucket" {
   description = "s3_bucket"
+  default     = "mlflow-artifacts-tf-ahm-amm"
 }
