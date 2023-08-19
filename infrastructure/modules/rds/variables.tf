@@ -1,5 +1,5 @@
 variable "db_name" {
-  description = "mlflow-database-tf"
+  description = "mlflowdatabasetf"
   type        = string
-  default     = "mlflow-database-tf"
+  default     = "mlflowdatabasetf"
 }

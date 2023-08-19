@@ -31,6 +31,6 @@ output "model_bucket" {
 
 module "rds_instance" {
   source = "./modules/rds"
-  db_name = "mlflow-database-tf"
+  db_name = "mlflowdatabasetf"
 }
 
