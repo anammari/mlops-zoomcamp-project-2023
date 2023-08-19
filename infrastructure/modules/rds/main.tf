@@ -2,7 +2,7 @@ resource "aws_db_instance" "default" {
   allocated_storage    = 10
   db_name              = var.db_name
   engine               = "postgres"
-  engine_version       = "13.4"
+  engine_version       = "15.3-R2"
   instance_class       = "db.t3.micro"
   username             = "mlflow"
   password             = "mlflow_tf"
